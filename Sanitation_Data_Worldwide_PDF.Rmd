@@ -1,0 +1,263 @@
+---
+title: "Sanitation_data_Worldwide_PDF"
+author: "Guilherme S. Porto"
+date: "02/02/2022"
+output: pdf_document
+---
+
+
+## Foreword: 
+### Sanitary control,Promotion of health habits and it's impact.
+##### Sanitary measures are essential to life, it's well known that washing hands, drinking clean water, avoiding contaminated fluids or surfaces and other basic measures impact the lives of humanity positively, by doing so, is possible to avoid contamination of different sorts,  reducing transmission of deseases and improving life expectancy, this Analysis report maps and presents the evolution and/or progress of sanitary control through the world in the XXIº century.
+
+
+
+### Context: 
+##### This analysis relates to the period between: 2000-2017, its data is related to sanitation aspects such as Handwashing with soap, Open Defecation, Basic and safely managed sanitation services, Basic and safely managed drinking water services, it's research revolves around 195 to 97 Countries varying between each group of data gathered. This Analysis intent to be an evaluation over the sanitation data gathered by the World Health Organization (WHO); The dataset was retrieved in [Kaggle](https://www.kaggle.com/navinmundhra/world-sanitation) and it has a remarcable 9.1 usability score, in this form is ensured by kaggle users it's quality over organization, usability, file format and by the World Health Organization it's veracity, integrity and research method.
+
+## Handwashing with soap
+```{r Handwashing with soap, message=FALSE, warning=FALSE}
+#Installing packages and loading
+pacman::p_load(pacman, tidyverse, ggplot2, dplyr, readr, readxl)
+
+#Choosing dataset and loading
+Handwashing_with_soap <- read_excel("Handwashing with soap.xlsx")
+
+## Cleaning data
+data<- Handwashing_with_soap %>%  drop_na() 
+
+## Visualizing data  
+View(Handwashing_with_soap) # Visualizing data in table format.
+```
+
+
+### Combined regions: Percentage of hand washers wit soap
+
+##### On average the combined regions improved the number of users in the past decade but since started to struggle, Not only to improve, but also to maintain the newly acquired status, especially since 2011, The starting point for a relevant retraction.
+
+```{r Hand_Washers_Regions_Combined, message=FALSE, warning=FALSE}
+ggplot(data = data)+
+  geom_smooth(mapping = aes(x = Year, y = Display_Value))+
+  labs(title = "Combined Regions: Percentage of hand washers with soap Region By Region.",
+       subtitle = "A variation through time.",
+       caption = "Data Analyst: Guilherme S. Porto.")
+```
+
+## Percentage of hand washers with soap Region By Region.
+
+##### Most of the regions improved the percentage of users of soap for hand washing,But Western Pacific and Eastern Mediterranean lowered their usage since the last 10-15 years, as a consequence the number of diseases spreaded by contaminated superficial contact grows significantly.Africa leads the growth through time, but continues to be in a significantly lower position, When compared with any other region, by being closely to a third of the users when compared to the second,Lowest region (Western Pacific).
+```{r Hand_Washers_Regions_By_Region, message=FALSE, warning=FALSE}
+ggplot(data = data)+
+  geom_smooth(mapping = aes(x = Year, y = Display_Value))+
+  facet_wrap(~WHO_region)+
+  labs(title = "Percentage of hand washers with soap Region By Region.",
+       subtitle = "A variation through time.",
+       caption = "Data Analyst: Guilherme S. Porto.")
+
+```
+
+## Open Defecation:
+
+```{r Open_Defecation_Data_Gathered, message=FALSE, warning=FALSE}
+Open_defecation <- read_excel("Opendefecation.xlsx") #Choosing dataset
+View(Open_defecation) #Visualiazing data as a table
+
+#Determining period of the data.
+ggplot(data= Open_defecation)+ #Data between 2000 and 2017
+  geom_bar(mapping = aes(x = Year))+ 
+  labs(title = "Occurence of Open defecation: 2000 - 2017.",
+       subtitle = "Research regarding 195 countries.",
+       caption = "Data Analyst: Guilherme S. Porto.")
+```
+
+## Quantity of residences by type of region:: The quantity of residences between rural and urban areas is close to the same
+
+```{r message=FALSE, warning=FALSE}
+#Plot over Residence_Area_Type X WHO_Region
+ggplot(data= Open_defecation)+
+  geom_bar(mapping = aes(x= who_region), fill = "Brown")+
+  facet_grid(~Residence_Area_Type)+
+  theme(axis.text.x = element_text(angle = 90))+
+  labs(title = "Residence_Area_Type X WHO_Region: 2000 - 2017.",
+       subtitle = "Research regarding 195 countries.",
+       caption = "Data Analyst: Guilherme S. Porto.")
+```
+
+## Precise and aproximated percentual of population practicing open defecation 
+```{r}
+ggplot(data= Open_defecation)+
+  geom_smooth(mapping = aes(x = Year, y = Numeric))+
+  labs(title = "Population Percentual practicing Open Defecation: 2000 - 2017.",
+       subtitle = "Research regarding 195 countries.",
+       caption = "Data Analyst: Guilherme S. Porto.")
+
+# Population practicing open defecation percentualy aproximated 
+ggplot(data= Open_defecation)+
+  geom_smooth(mapping = aes(x = Year, y = Display_Value), color = "Blue")+
+  labs(title = "Population Percentual practicing Open Defecation: 2000 - 2017.",
+       subtitle = "Research regarding 195 countries.",
+  caption = "Data Analyst: Guilherme S. Porto.")
+```
+
+
+
+## Basic and safely managed sanitation service:
+```{r message=FALSE, warning=FALSE}
+#Determining dataset
+Basic_and_safely_managed_sanitation_services <- read_excel("Basic and safely managed sanitation services.xlsx")
+View(Basic_and_safely_managed_sanitation_services) #Visualizing data in table format
+
+#Droping na values
+data <-Basic_and_safely_managed_sanitation_services %>% drop_na()
+#################################################################################################
+```
+
+
+## Safely managed sanitation: Area type by WHO_Region:
+
+### Europe has a significanly larger portion of safely managed sanitation services when compared with other regions, resulting in significantly lower number of deseased and deaths related to poor sanitation.
+
+```{r}
+ggplot(data = data )+
+  geom_bar(mapping = aes(x = Safely_Residence_Area_Type))+
+  facet_grid(~Safely_WHO_Region)+
+  labs(title = "Safely managed sanitation services between: 2000 - 2017.",
+       subtitle = "Residence_Area_Type_Managed X Who_Region_Managed.",
+       caption = "Data analyst: Guilherme S. Porto.")
+
+```
+
+## At least basic  sanitation:Residence_Area_Type evaluated by WHO_Region
+##### Africa has the highest number of residences with at least basic sanitation levels, which when more profoundly analyzed is easy to understand that it is not a good condition , because as seen in the last graph and other future graphics the number of residences in safely managed condition is smaller than any other region, this information is more evident when visualizing the graph "Safely managed sanitation: Percentage by Time, a comparision through region".
+```{r}
+ggplot(data = data )+
+  geom_bar(mapping = aes(x = At_Least_Residence_Area_Type))+
+  facet_grid(~At_Least_WHO_Region)+
+  labs(title = "At least basic sanitation:2000 - 2017.",
+       subtitle = "Development over time.",
+       caption = "Data analyst: Guilherme S. Porto.")
+```
+
+## Safely and at least basic sanitation services through time:
+#####The results have improved significantly through the past 18 years, ensuring this way a smaller mortality rate, number of deseases and other complications brought by poor sanitation.
+```{r}
+# Time over Safely managed sanitation:services
+ggplot(data = data)+
+  geom_smooth(mapping = aes(x = Safely_Period, y = Safely_Percentages))+
+  labs(title = "Safely managed sanitation: Services Between: 2000 - 2017.",
+       subtitle = "Development over time.",
+       caption = "Data Analyst: Guilherme S. Porto.")
+
+
+# Time over At least basic  sanitation services
+ggplot(data = data)+
+  geom_smooth(mapping = aes(x = At_Least_Period, y = At_Least_Percentages))+
+  labs(title = "At least basic sanitation services between: 2000 - 2017.",
+       subtitle = "Development over time.",
+       caption = "Data Analyst: Guilherme S. Porto.")
+```
+
+## Evaluation between regions through time:
+##### This compilation of graphs make a clear statement over the comparion between regions such as Africa and South-East Asia when seen what happens in Europe and Western Pacific. 
+
+```{r}
+#Safely managed sanitation: Percentage by Time, a comparision through region
+ggplot(data = data)+
+  geom_smooth(mapping = aes(x = Safely_Percentages, y = Safely_Period))+
+  facet_wrap(~Safely_WHO_Region)+
+  labs(title = "Safely managed sanitation services between: 2000 - 2017.",
+       subtitle = "Regional evaluation over percentage X Time.",
+       caption = "Data analyst: Guilherme S. Porto.")
+
+#At least basic  sanitation: Percentage by Time, a comparision through region
+ggplot(data = data)+
+  geom_smooth(mapping = aes(x = At_Least_Percentages, y = At_Least_Period))+
+  facet_wrap(~At_Least_WHO_Region)+
+  labs(title = "At least basic sanitation services between: 2000 - 2017.",
+       subtitle = "Regional evaluation over percentage X Time.",
+       caption = "Data analyst: Guilherme S. Porto.")
+```
+
+
+## Basic and safely managed drinking water services
+```{r}
+
+#Choosing and filing dataset
+Basic_and_safely_managed_drinking_water_services <- read_excel("Basic and safely managed drinking water services.xlsx")
+View(Basic_and_safely_managed_drinking_water_services) #Visualizing data in table format
+
+#Removing NA lines for the Residence Area Type M plot
+data <- Basic_and_safely_managed_drinking_water_services  %>% drop_na() 
+```
+
+
+## Comparision between well and at least basic Managed Drinking Water Services in different Area Types:
+#### Urban areas have a tendency to have better drinking water services but not as much as previously expected. There is a clear difference between the well managed drinking water services and at least basic services; While Europe is the highest well managed situation and third region with at least basic services, we can see south-east Asia, Western Pacific struggling to achieve even at least basic services and Africa fighting to have well managed drinking services.
+
+```{r}
+ggplot(data = data )+
+  geom_bar(mapping = aes(x = Residence_Area_Type_M))+
+  facet_grid(~WHO_region_M)+
+  labs(title = "Well managed drinking water services between: 2000 - 2017.",
+  subtitle = "Residence_Area_Type_Managed X Who_Region_Managed.",
+  caption = "Data analyst: Guilherme S. Porto.")
+
+#At least basic Drinking Water Services: Residence_Area_Type_B split by who_Region_B
+ggplot(data = data )+
+  geom_bar(mapping = aes(x = Residence_Area_Type_B))+
+  facet_grid(~WHO_region_B)+
+  labs(title = "At least basic drinking water services between: 2000 - 2017.",
+       subtitle = "Residence_Area_Type_Managed X Who_Region_Managed.",
+       caption = "Data analyst: Guilherme S. Porto.")
+```
+
+#### It is important highlight that both well managed and at least basic drinking water services are improving  Consistently over time, and that At least basic is improving in a more fast passed manner, this data fundamental to display the results and reduce the problems brought by poorly managed drinking water services. Contaminated water and poor sanitation are linked to transmission of diseases such as":Cholera, Diarrhea, Dysentery, Hepatitis A, Typhoid, and Polio; Absent, inadequate, or inappropriately managed water and sanitation services expose individuals to preventable health risks; This is particularly the case in health care facilities where both, patients and staff are placed at 
+additional risk of infection and diseases when water, sanitation, and hygiene services are lacking, globally, "15% of patients develop an infection during a hospital stay, with the proportion much greater in low-income countries"
+
+```{r}
+# Time over well managed drinking water services
+ggplot(data= data)+
+  geom_smooth(mapping = aes(x = Year_M, y = Display_Value_M))+
+  labs(title = "Well managed drinking water services between: 2000 - 2017.",
+       subtitle = "Development over time.",
+  caption = "Data Analyst: Guilherme S. Porto.")
+
+
+# Time over At least basic drinking water services
+ggplot(data= data)+
+  geom_smooth(mapping = aes(x = Year_B, y = Display_Value_B))+
+  labs(title = "At least basic drinking water services between: 2000 - 2017.",
+     subtitle = "Development over time.",
+     caption = "Data Analyst: Guilherme S. Porto.")
+```
+
+## Well Managed drinking water services region comparition:
+#### South-East Asia and Africa continue to strugle
+```{r}
+ggplot(data = data)+
+  geom_smooth(mapping = aes(x = Display_Value_M, y = Year_M))+
+  facet_wrap(~WHO_region_M)+
+  labs(title = "Well managed drinking water services between: 2000 - 2017.",
+       subtitle = "Residence_Area_Type_Managed X Who_Region_Managed.",
+       caption = "Data analyst: Guilherme S. Porto.")
+```
+
+## Conclusion: -
+#### - Comparing the over all  data between 2000 and 2017 the world has significantly improved it's sanitation aspects, but there's a necessity to reinforce some actions, such as handwashing with soap in 
+Africa and Western Pacific and Eastern Mediterranean, Africa leads the growth through time, 
+but continues to be in a significantly lower position than other regions, When compared with any other region, by being closely to a third of the users when compared to the second,Lowest region (Western Pacific).
+Western Pacific and Eastern Mediterranean.
+
+#### - Concerning to sanitation services both well managed and at least basic drinking water services are improving consistently over time and At least basic is improving in a more fast passed manner,
+Europe has a significanly larger portion of well managed sanitation services  when compared with other regions, resulting in significantly lower number of diseased and deaths related to poor sanitation,
+while Africa has the highest number of residences with at least basic sanitation levels but this number when closely analyzed reveals that the number of residences in safely managed sanitation conditions is smaller than any other region.
+
+#### - Drinking Water Services: Both well managed and at least basic drinking water services are improving  Consistently over time, and At least basic is improving in a more fast passed manner.
+
+#### - As Contaminated water and poor sanitation are linked to transmission of diseases such as":Cholera, Diarrhea, Dysentery, Hepatitis A, Typhoid, and Polio; Absent, inadequate, or inappropriately managed water and sanitation services 
+##### expose individuals to preventable health risks; This is particularly the case in health care facilities where both, patients and staff are placed at additional risk of infection and diseases when water, 
+sanitation, and hygiene services are lacking, globally, 15% of patients develop an infection during a hospital stay, with the proportion becoming much greater in low-income countries
+
+#### Urban areas have a tendency to have better drinking water services but not as much as previously expected. There is a clear difference between the well managed drinking water services and at least basic services;
+
+#### For more information, i recommend to access this link for WHO - [link](https://www.who.int/news-room/fact-sheets/detail/drinking-water)
